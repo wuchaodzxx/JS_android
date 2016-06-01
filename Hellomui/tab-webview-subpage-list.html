@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/app.css"/>
+		
+		<style>
+			html,body {
+				background-color: #efeff4;
+			}
+			.title{
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+			 .oa-contact-cell.mui-table .mui-table-cell {
+				padding: 11px 0;
+				vertical-align: middle;
+			}
+			
+			.oa-contact-cell {
+				position: relative;
+				margin: -11px 0;
+			}
+	
+			.oa-contact-avatar {
+				width: 75px;
+			}
+			.oa-contact-avatar img {
+				border-radius: 50%;
+			}
+			.oa-contact-content {
+				width: 100%;
+			}
+			.oa-contact-name {
+				margin-right: 20px;
+			}
+			.oa-contact-name, oa-contact-position {
+				float: left;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">列表</h1>
+		</header>
+		
+		<!--弹窗菜单:上传文件的操作-->
+		<div id="popover_selectFile" class="mui-popover">
+		  <ul class="mui-table-view">
+		    <li class="mui-table-view-cell">
+		    	<input type="file" name="file" id="file" value="" /> 
+		    </li>
+		    <select id="uploadFileClass" class="mui-select">
+				<option value="divcss5">divcss5</option>
+				<option value="DIVCSS5">DIVCSS5</option>
+			</select>
+		    <li class="mui-table-view-cell">
+		    	<input type="button" name="上传" id="" class="" value="上传" onclick="uploadFileAction()"/>
+		    </li>
+		  </ul>
+		</div>
+		
+		<!--弹窗菜单:添加文件分类的操作-->
+		<div id="popover_addFileClass" class="mui-popover">
+		  <ul class="mui-table-view">
+		    <li class="mui-table-view-cell">
+		    	类名:<input type="text" name="" id="fileClassName" value=""  /> 
+		    </li>
+		    <li class="mui-table-view-cell">
+		    	<input type="button" name="添加" id="" class="" value="添加" onclick="addFileClassAction()"/>
+		    </li>
+		  </ul>
+		</div>
+		
+		<!--弹窗菜单:删除文件分类的操作-->
+		<div id="popover_deleteFileClass" class="mui-popover">
+		  <ul class="mui-table-view">
+		    <div class="mui-input-row">
+						<label>删除分类</label>
+						<select id="deleteFileClass" class="mui-select">
+							 <option value="divcss5">divcss5</option>
+					         <option value="DIVCSS5">DIVCSS5</option>
+						</select>
+			</div>
+			<li class="mui-table-view-cell">
+		    	<input type="button" name="删除" id="" class="" value="删除" onclick="deleteFileClassAction()"/>
+		    </li>
+		  </ul>
+		</div>
+		
+		<!--弹窗菜单:显示对文件的操作-->
+		<div id="mui-popover-tapItem" class="mui-popover">
+		  <ul class="mui-table-view">
+		    <li class="mui-table-view-cell"><a href="#" onclick="downloadFile()">下载该文件</a></li>
+		    <li class="mui-table-view-cell"><a href="#" onclick="changeFileClass()">修改分类</a></li>
+		    <li class="mui-table-view-cell"><a href="#" onclick="deleteFile()">删除该文件</a></li>
+		  </ul>
+		</div>
+		
+		<!--弹窗菜单:显示对文件的操作-->
+		<div id="mui-popover-changeFileClass" class="mui-popover">
+		  <ul class="mui-table-view">
+		    	<div class="mui-input-row">
+						<label>更改分类</label>
+						<select id="changeFileClass" class="mui-select">
+							 <option value="divcss5">divcss5</option>
+					         <option value="DIVCSS5">DIVCSS5</option>
+						</select>
+				</div>
+				<li class="mui-table-view-cell">
+		    	<input type="button" name="更改" id="" class="" value="更改" onclick="changeFileClassAction()"/>
+		    </li>
+		  </ul>
+		</div>
+		
+		
+		
+		
+		
+		<div id="main" class="mui-content">
+			<div class="mui-card">
+				<ul id="fileClassShow" class="mui-table-view ">
+					<li class="mui-table-view-cell mui-collapse ">
+						<a class="mui-navigate-right" href="#">学习</a>
+						<div class="mui-collapse-content">
+							<div class="mui-table-view-cell mui-media">
+								<div id="123" class="mui-media-body">
+									<a id="1" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
+										<div id="">
+											文件名<br/>  
+											<span style="color:#F0AD4E; font-size: 13px;">文件大小：<span id="author" >20k</span></span>
+											<br/> 
+											<span style="color:#F0AD4E;font-size: 13px;">时间：<span id="author" >2014-03-04</span></span>
+								
+										</div>
+									</a>
+								</div> 
+							
+							</div>
+							<div class="mui-table-view-cell mui-media">
+								<div id="123" class="mui-media-body">
+									<a id="2" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
+										<div id="">
+											幸福<br/>  
+											<span style="color:#F0AD4E; font-size: 13px;">作者：<span id="author" >陈陈</span></span>
+											<br/> 
+											<span style="color:#F0AD4E;font-size: 13px;">时间：<span id="author" >2014-03-04</span></span>
+											<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+										</div>
+									</a>
+								</div>
+							
+							</div>
+						</div>
+					</li>
+
+					<li class="mui-table-view-cell mui-collapse ">
+						<a class="mui-navigate-right" href="#">娱乐</a>
+						<div class="mui-collapse-content">
+							<div class="mui-table-view-cell mui-media">
+								<div id="123" class="mui-media-body">
+									<a id="3" class="itemLink"  href="javascript:" onclick="tapIn(this.id)">
+										<div id="">
+											幸福<br/>  
+											<span style="color:#F0AD4E; font-size: 13px;">作者：<span id="author" >陈陈</span></span>
+											<br/> 
+											<span style="color:#F0AD4E;font-size: 13px;">时间：<span id="author" >2014-03-04</span></span>
+											<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+										</div>
+									</a>
+								</div>
+							</div>
+							<div class="mui-table-view-cell mui-media">
+								<div id="123" class="mui-media-body">
+									<a id="4" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
+										<div id="">
+											幸福<br/>  
+											<span style="color:#F0AD4E; font-size: 13px;">作者：<span id="author" >陈陈</span></span>
+											<br/> 
+											<span style="color:#F0AD4E;font-size: 13px;">时间：<span id="author" >2014-03-04</span></span>
+											<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="mui-button-row" style="align-content: center;margin-top: 20px;">
+				<button type="button" class="mui-btn mui-btn-primary" onclick="uploadFile()">上传文件</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-primary" onclick="addFileClass()">添加分类</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-primary" onclick="deleteFileClass()">删除分类</button>&nbsp;&nbsp;
+			</div>
+		</div>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script src="js/my/test.js"></script>
+	<script>
+		var focusId=null;//当前聚焦文件id，用于弹出菜单对文件的操作，用来传值
+		mui.init({
+		  gestureConfig:{
+		   longtap: true, //默认为false
+		  }
+		});
+		
+
+
+		alert(JSON.stringify(jsonFileList.createFileList(30,10))); 
+
+		function refreshThisPage(){
+			//从后台获取数据，并对页面所有信息进行更改
+			var u = document.getElementById("fileClassShow");
+			refreshDom(u,jsonFileList.createFileList(30,10)); 
+		} 
+		refreshThisPage();
+		//点击某项，执行该函数
+		function tapIn(id){
+			alert(id); 
+		}
+		//长按某项，执行该函数
+		mui(".mui-media-body").on('longtap','.itemLink',function(){
+		  //获取id
+		  //var id = this.getAttribute("id");
+		  //alert(this.id);
+		  focusId=this.id;
+		  mui('#mui-popover-tapItem').popover('show',document.getElementById(this.id));
+		}); 
+		
+		//以下函数执行后都应该刷新页面
+		function downloadFile(){
+			alert("下载文件："+focusId);
+		}
+		//
+		function changeFileClass(){
+			mui('#mui-popover-changeFileClass').popover('show',document.getElementById(this.id));
+		}
+		function changeFileClassAction(){
+			var fileId = focusId;
+			var className = document.getElementById("changeFileClass").value;
+			//ajax
+			alert(className+":"+fileId);
+			
+			//刷新页面
+			mui('#mui-popover-changeFileClass').popover('hide',document.getElementById(this.id));
+			refreshThisPage();
+		}
+		//
+		function deleteFile(){
+			//通过ajax删除
+			
+			//
+			refreshThisPage();
+			alert("删除文件："+focusId);
+		}
+		
+		//文件上传，弹出菜单
+		function uploadFile(){
+			mui('#popover_selectFile').popover('show',document.getElementById("popover_upFile"));
+		}
+		function uploadFileAction(){
+			var fileClass = document.getElementById("uploadFileClass");
+			var file = document.getElementById("file");
+			var fd = new FormData();
+			fd.append("file", file);
+			//接下来可以通过ajax的send方法发送fd
+			alert(fileClass);
+			//刷新
+			mui('#popover_selectFile').popover('hide',document.getElementById("popover_upFile"));
+			refreshThisPage();
+		}
+		//添加文件分类,弹出菜单
+		function addFileClass(){
+			mui('#popover_addFileClass').popover('show',document.getElementById("popover_upFile"));
+		}
+		function addFileClassAction(){
+			var className = document.getElementById("fileClassName").value;
+			//ajax传送
+			alert(className);
+			//刷新页面
+			mui('#popover_addFileClass').popover('hide',document.getElementById("popover_upFile"));
+			refreshThisPage();
+		}
+		//删除分类弹出菜单
+		function deleteFileClass(){
+			mui('#popover_deleteFileClass').popover('show',document.getElementById("popover_upFile"));
+		}
+		function deleteFileClassAction(){
+			
+			var deleteClassName = document.getElementById("deleteFileClass").value;
+			//ajax传送
+			alert(deleteClassName);
+			//刷新页面
+			mui('#popover_deleteFileClass').popover('hide',document.getElementById("popover_upFile"));
+			refreshThisPage();
+		}
+	</script>
+</html>

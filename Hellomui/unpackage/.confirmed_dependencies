@@ -1,0 +1,273 @@
+{
+  "index.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/update.js",
+      "list.html",
+      "main.html"
+    ],
+    "refer": [
+      "index-menu.html",
+      "list.html",
+      "main.html"
+    ]
+  },
+  "examples/tab-webview-subpage-contact.html": {
+    "resources": [
+      "images/60x60.gif"
+    ],
+    "refer": []
+  },
+  "examples/tab-webview-main.html": {
+    "resources": [
+      "examples/tab-webview-subpage-about.html"
+    ],
+    "refer": [
+      "examples/tab-webview-subpage-setting.html",
+      "examples/tab-webview-subpage-chat.html",
+      "examples/tab-webview-subpage-contact.html",
+      "examples/tab-webview-subpage-about.html"
+    ]
+  },
+  "list.html": {
+    "refer": [
+      "examples/template.html",
+      "examples/tab-webview-main.html",
+      "examples/pullrefresh_main.html",
+      "examples/guide.html",
+      "examples/info.html",
+      "examples/dialog.html",
+      "examples/icons.html"
+    ],
+    "resources": []
+  },
+  "examples/pullrefresh_main.html": {
+    "resources": [
+      "examples/pullrefresh_sub.html"
+    ],
+    "refer": [
+      "examples/pullrefresh_sub.html"
+    ]
+  },
+  "examples/info.html": {
+    "resources": [
+      "images/qrcode.png",
+      "js/mui.min.js",
+      "css/app.css",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "main.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "images/contact-01.png",
+      "js/app.js",
+      "tab-webview-subpage-about.html",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf",
+      "tab-webview-subpage-main.html"
+    ],
+    "refer": [
+      "login.html",
+      "setting.html",
+      "tab-webview-subpage-setting.html",
+      "tab-webview-subpage-chat.html",
+      "tab-webview-subpage-contact.html",
+      "tab-webview-subpage-about.html",
+      "tab-webview-subpage-main.html",
+      "tab-webview-subpage-file.html",
+      "tab-webview-subpage-edit.html",
+      "tab-webview-subpage-list.html"
+    ]
+  },
+  "login.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/app.js",
+      "js/mui.enterfocus.js",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "main.html",
+      "reg.html",
+      "forget_password.html",
+      "setting.html",
+      "help.html",
+      "about.html"
+    ]
+  },
+  "setting.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "tab-webview-subpage-setting.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "help.html": {
+    "resources": [
+      "fonts/mui.ttf",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": []
+  },
+  "tab-webview-subpage-chat.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf"
+    ],
+    "refer": []
+  },
+  "tab-webview-subpage-about.html": {
+    "resources": [
+      "js/mui.min.js"
+    ],
+    "refer": []
+  },
+  "tab-webview-subpage-contact.html": {
+    "resources": [
+      "js/mui.min.js"
+    ],
+    "refer": []
+  },
+  "about.html": {
+    "resources": [
+      "fonts/mui.ttf"
+    ],
+    "refer": []
+  },
+  "tab-webview-subpage-main.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "main_pullrefresh_sub.html",
+      "fonts/mui.ttf",
+      "js/test.js",
+      "js/my/test.js"
+    ],
+    "refer": [
+      "main_pullrefresh_sub.html"
+    ]
+  },
+  "main_pullrefresh_sub.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "tab-webview-subpage-file.html": {
+    "resources": [
+      "css/app.css",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "tab-webview-subpage-list.html": {
+    "resources": [
+      "css/app.css",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/my/test.js"
+    ],
+    "refer": []
+  },
+  "tab-webview-subpage-edit.html": {
+    "resources": [
+      "fonts/mui.ttf",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "css/app.css",
+      "js/ckeditor_full/skins/moonocolor/editor.css",
+      "js/ckeditor_full/lang/zh-cn.js",
+      "js/ckeditor_full/config.js",
+      "js/ckeditor_full/contents.css",
+      "js/ckeditor_full/styles.js",
+      "js/ckeditor_full/skins/moonocolor/skin.js",
+      "js/ckeditor_full/ckeditor.js",
+      "js/ckeditor_full/skins/moonocolor/icons_hidpi.png",
+      "js/ckeditor_full/plugins/icons_hidpi.png",
+      "js/ckeditor_full/plugins/smiley/images/confused_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/shades_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/angel_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/whatchutalkingabout_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/lightbulb.png",
+      "js/ckeditor_full/plugins/smiley/images/envelope.png",
+      "js/ckeditor_full/plugins/smiley/images/regular_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/thumbs_down.png",
+      "js/ckeditor_full/plugins/smiley/images/angry_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/kiss.png",
+      "js/ckeditor_full/plugins/smiley/dialogs/smiley.js",
+      "js/ckeditor_full/skins/moonocolor/dialog.css",
+      "js/ckeditor_full/plugins/smiley/images/cry_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/tongue_smile.png",
+      "js/ckeditor_full/skins/moonocolor/images/hidpi/close.png",
+      "js/ckeditor_full/plugins/smiley/images/wink_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/embarrassed_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/devil_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/broken_heart.png",
+      "js/ckeditor_full/plugins/image/dialogs/image.js",
+      "js/ckeditor_full/plugins/smiley/images/omg_smile.png",
+      "js/ckeditor_full/plugins/smiley/images/thumbs_up.png",
+      "js/ckeditor_full/plugins/smiley/images/sad_smile.png",
+      "js/ckeditor_full/skins/moonocolor/images/hidpi/refresh.png",
+      "js/ckeditor_full/plugins/smiley/images/heart.png",
+      "js/ckeditor_full/skins/moonocolor/images/hidpi/lock.png",
+      "js/ckeditor_full/plugins/smiley/images/teeth_smile.png",
+      "js/ckeditor_full/plugins/specialchar/dialogs/lang/zh-cn.js",
+      "js/ckeditor_full/plugins/specialchar/dialogs/specialchar.js",
+      "js/ckeditor_full/plugins/link/dialogs/anchor.js"
+    ],
+    "refer": []
+  },
+  "t1.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "t2.html",
+      "t3.html"
+    ]
+  },
+  "t2.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "t3.html"
+    ]
+  },
+  "t3.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "t2.html"
+    ]
+  }
+}

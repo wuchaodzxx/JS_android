@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<style>
+			html,body {
+				background-color: #efeff4;
+			}
+			.title{
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+		</style>
+	</head>
+	<body>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell mui-media">
+						<a id="1234" class="paperLink" href="javascript:;">
+							<div class="mui-media-body">
+								幸福<br/>  
+								<span style="color:#F0AD4E; font-size: 13px;">作者：<span id="author" >陈陈</span></span>
+								<br/> 
+								<span style="color:#F0AD4E;font-size: 13px;">时间：<span id="author" >2014-03-04</span></span>
+								<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+							</div>
+						</a>
+					</li>
+				
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script src="js/my/test.js"></script>
+	<script>
+		mui.init({
+				swipeBack: false,
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
+			});
+			
+			
+			var paperList=jsonPaperList.createPaperList(50);
+			var paperNumbers=paperList.paperList.length;//统计用户文章总数目
+			//初始化，显示部分文章列表
+			(function(){
+				//alert(paperList.paperList[0]);
+				//在实际业务中，在这行应该对paperList进行获取服务器的实时数据，同时更新paperNumbers的值
+				var table = document.body.querySelector('.mui-table-view');
+					for (var i = 0; i < 10; i++) {
+						if(i<=paperList.paperList.length){
+							var paperElement = createPaperElement(paperList.paperList[i].paperId,paperList.paperList[i].paperName,paperList.paperList[i].paperDate,paperList.paperList[i].paperAuthor,paperList.paperList[i].paperAbstract);
+							//下拉刷新，新纪录插到最前面；
+							table.insertBefore(paperElement, table.firstChild); 
+						}
+						
+					}
+			}());
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					var tableChilds = table.childNodes;
+					//删除所有文章列表，从新显示
+					for(var i=0;i<tableChilds.length;i++){
+						table.removeChild(tableChilds[i]);
+					}
+					//重新显示
+					(function(){
+						//在实际业务中，在这行应该对paperList进行获取服务器的实时数据，同时更新paperNumbers的值
+						//alert(paperList.paperList[0]);
+						var table = document.body.querySelector('.mui-table-view');
+						for (var i = 0; i < 10; i++) {
+							if(i<=paperList.paperList.length){
+								var paperElement = createPaperElement(paperList.paperList[i].paperId,paperList.paperList[i].paperName,paperList.paperList[i].paperDate,paperList.paperList[i].paperAuthor,paperList.paperList[i].paperAbstract);
+								//下拉刷新，新纪录插到最前面；
+								table.insertBefore(paperElement, table.firstChild); 
+							}
+						
+						}
+					}());
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				}, 1000);//实际开发，可能需要减小timeout的时间
+			}
+			
+			
+			
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				//alert("pullupRefresh");
+				setTimeout(function() {
+					//mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 4)); //参数为true代表没有更多数据了。
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					//alert("cells.length:"+cells.length);
+					for (var i = cells.length, len = i + 5; i < len; i++) {
+						//alert(i);
+						if(i>=paperNumbers){
+							//alert("没有更多数据");
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+							break;
+						}else{
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+						}
+						
+						var paperElement = createPaperElement(paperList.paperList[i].paperId,paperList.paperList[i].paperName,paperList.paperList[i].paperDate,paperList.paperList[i].paperAuthor,paperList.paperList[i].paperAbstract);
+						table.appendChild(paperElement); 
+					}
+				}, 1500);
+			}
+			
+	</script>
+</html>
