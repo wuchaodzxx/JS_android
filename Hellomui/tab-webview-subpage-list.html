@@ -12,7 +12,8 @@
 		<link rel="stylesheet" href="css/mui.min.css">
 		<!--App自定义的css-->
 		<link rel="stylesheet" type="text/css" href="css/app.css"/>
-		
+
+
 		<style>
 			html,body {
 				background-color: #efeff4;
@@ -48,13 +49,166 @@
 				float: left;
 			}
 			
+			
+			.mui-preview-image.mui-fullscreen {
+				position: fixed;
+				z-index: 20;
+				background-color: #000;
+			}
+			.mui-preview-header,
+			.mui-preview-footer {
+				position: absolute;
+				width: 100%;
+				left: 0;
+				z-index: 10;
+			}
+			.mui-preview-header {
+				height: 44px;
+				top: 0;
+			}
+			.mui-preview-footer {
+				height: 50px;
+				bottom: 0px;
+			}
+			.mui-preview-header .mui-preview-indicator {
+				display: block;
+				line-height: 25px;
+				color: #fff;
+				text-align: center;
+				margin: 15px auto 4;
+				width: 70px;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-radius: 12px;
+				font-size: 16px;
+			}
+			.mui-preview-image {
+				display: none;
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+			.mui-preview-image.mui-preview-in {
+				-webkit-animation-name: fadeIn;
+				animation-name: fadeIn;
+			}
+			.mui-preview-image.mui-preview-out {
+				background: none;
+				-webkit-animation-name: fadeOut;
+				animation-name: fadeOut;
+			}
+			.mui-preview-image.mui-preview-out .mui-preview-header,
+			.mui-preview-image.mui-preview-out .mui-preview-footer {
+				display: none;
+			}
+			.mui-zoom-scroller {
+				position: absolute;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				-webkit-backface-visibility: hidden;
+			}
+			.mui-zoom {
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			.mui-slider .mui-slider-group .mui-slider-item img {
+				width: auto;
+				height: auto;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			.mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+				width: 100%;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+				display: inline-table;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			.mui-preview-loading {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				display: none;
+			}
+			.mui-preview-loading.mui-active {
+				display: block;
+			}
+			.mui-preview-loading .mui-spinner-white {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -25px;
+				margin-top: -25px;
+				height: 50px;
+				width: 50px;
+			}
+			.mui-preview-image img.mui-transitioning {
+				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+				transition: transform 0.5s ease, opacity 0.5s ease;
+			}
+			@-webkit-keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			@keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			p img {
+				max-width: 100%;
+				height: auto;
+			}
 		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
+		<header class="mui-bar mui-bar-nav" style="align-content: center;">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">列表</h1>
+			<h1 class="mui-title">文件</h1>
+			<h1 id="pageTitle" class="mui-title" style="width: 1px; margin-left: auto;margin-right: auto;"></h1> 
 		</header>
 		
 		<!--弹窗菜单:上传文件的操作-->
@@ -63,10 +217,18 @@
 		    <li class="mui-table-view-cell">
 		    	<input type="file" name="file" id="file" value="" /> 
 		    </li>
-		    <select id="uploadFileClass" class="mui-select">
-				<option value="divcss5">divcss5</option>
-				<option value="DIVCSS5">DIVCSS5</option>
-			</select>
+		    
+		    <li class="mui-table-view-cell">
+		    	备注:<input type="text" name="fileRemark" id="fileRemark" value="" /> 
+		    </li>
+		    
+		    <li class="mui-table-view-cell">
+		    	分类： <select name="fileClassSelectElement" id="uploadFileClass" class="mui-select">
+					<option value="divcss5">divcss5</option>
+					<option value="DIVCSS5">DIVCSS5</option>
+				</select>
+		    </li>
+			  
 		    <li class="mui-table-view-cell">
 		    	<input type="button" name="上传" id="" class="" value="上传" onclick="uploadFileAction()"/>
 		    </li>
@@ -90,7 +252,7 @@
 		  <ul class="mui-table-view">
 		    <div class="mui-input-row">
 						<label>删除分类</label>
-						<select id="deleteFileClass" class="mui-select">
+						<select name="fileClassSelectElement" id="deleteFileClass" class="mui-select">
 							 <option value="divcss5">divcss5</option>
 					         <option value="DIVCSS5">DIVCSS5</option>
 						</select>
@@ -101,8 +263,8 @@
 		  </ul>
 		</div>
 		
-		<!--弹窗菜单:显示对文件的操作-->
-		<div id="mui-popover-tapItem" class="mui-popover">
+		<!--长按 弹窗菜单:显示对文件的操作-->
+		<div id="mui-popover-longtapItem" class="mui-popover">
 		  <ul class="mui-table-view">
 		    <li class="mui-table-view-cell"><a href="#" onclick="downloadFile()">下载该文件</a></li>
 		    <li class="mui-table-view-cell"><a href="#" onclick="changeFileClass()">修改分类</a></li>
@@ -110,12 +272,23 @@
 		  </ul>
 		</div>
 		
+		<!--单击  弹窗菜单:打开图片或显示其他文件信息-->
+		
+		<div id="mui-popover-tapItem" class="mui-popover" style="padding: 10px 10px 10px 10px;">
+			
+			<p class='mui-grid-view' id="itemMoreInfo"></p>  
+			
+		</div>
+		
+		
+	
+		
 		<!--弹窗菜单:显示对文件的操作-->
 		<div id="mui-popover-changeFileClass" class="mui-popover">
 		  <ul class="mui-table-view">
 		    	<div class="mui-input-row">
 						<label>更改分类</label>
-						<select id="changeFileClass" class="mui-select">
+						<select  name="fileClassSelectElement" id="changeFileClass" class="mui-select">
 							 <option value="divcss5">divcss5</option>
 					         <option value="DIVCSS5">DIVCSS5</option>
 						</select>
@@ -137,8 +310,9 @@
 						<a class="mui-navigate-right" href="#">学习</a>
 						<div class="mui-collapse-content">
 							<div class="mui-table-view-cell mui-media">
-								<div id="123" class="mui-media-body">
-									<a id="1" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
+								<div id="123253" class="mui-media-body">
+									<a id="76341" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
+										<img class="mui-media-object mui-pull-left" src="images/contact-01.png">
 										<div id="">
 											文件名<br/>  
 											<span style="color:#F0AD4E; font-size: 13px;">文件大小：<span id="author" >20k</span></span>
@@ -151,8 +325,9 @@
 							
 							</div>
 							<div class="mui-table-view-cell mui-media">
-								<div id="123" class="mui-media-body">
-									<a id="2" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
+								<div id="124563" class="mui-media-body">
+									<a id="2543" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
+										<img class="mui-media-object mui-pull-left" src="http://documents-oss.oss-cn-qingdao.aliyuncs.com/36/6c7d9e93jw1e5wlz1nw6xj20zk0sgwjg.jpg">
 										<div id="">
 											幸福<br/>  
 											<span style="color:#F0AD4E; font-size: 13px;">作者：<span id="author" >陈陈</span></span>
@@ -171,8 +346,8 @@
 						<a class="mui-navigate-right" href="#">娱乐</a>
 						<div class="mui-collapse-content">
 							<div class="mui-table-view-cell mui-media">
-								<div id="123" class="mui-media-body">
-									<a id="3" class="itemLink"  href="javascript:" onclick="tapIn(this.id)">
+								<div id="12234233" class="mui-media-body">
+									<a id="234233" class="itemLink"  href="javascript:" onclick="tapIn(this.id)">
 										<div id="">
 											幸福<br/>  
 											<span style="color:#F0AD4E; font-size: 13px;">作者：<span id="author" >陈陈</span></span>
@@ -184,8 +359,8 @@
 								</div>
 							</div>
 							<div class="mui-table-view-cell mui-media">
-								<div id="123" class="mui-media-body">
-									<a id="4" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
+								<div id="13423" class="mui-media-body">
+									<a id="424" class="itemLink" href="javascript:" onclick="tapIn(this.id)">
 										<div id="">
 											幸福<br/>  
 											<span style="color:#F0AD4E; font-size: 13px;">作者：<span id="author" >陈陈</span></span>
@@ -201,44 +376,83 @@
 				</ul>
 			</div>
 			<div class="mui-button-row" style="align-content: center;margin-top: 20px;">
-				<button type="button" class="mui-btn mui-btn-primary" onclick="uploadFile()">上传文件</button>&nbsp;&nbsp;
-				<button type="button" class="mui-btn mui-btn-primary" onclick="addFileClass()">添加分类</button>&nbsp;&nbsp;
-				<button type="button" class="mui-btn mui-btn-primary" onclick="deleteFileClass()">删除分类</button>&nbsp;&nbsp;
+				<button id="btn1" type="button" class="mui-btn mui-btn-primary" onclick="uploadFile()">上传文件</button>&nbsp;&nbsp;
+				<button id="btn2" type="button" class="mui-btn mui-btn-primary" onclick="addFileClass()">添加分类</button>&nbsp;&nbsp;
+				<button id="btn3" type="button" class="mui-btn mui-btn-primary" onclick="deleteFileClass()">删除分类</button>&nbsp;&nbsp;
 			</div>
+			
 		</div>
 	</body>
+	<script>
+		window.focusId=null;//当前聚焦文件id，用于弹出菜单对文件的操作，用来传值
+	</script>
 	<script src="js/mui.min.js"></script>
+	<script src="js/jquery-1.8.3.min.js"></script>
+	<script src="js/mui.zoom.js"></script>
+	<script src="js/mui.previewimage.js"></script>
 	<script src="js/my/test.js"></script>
 	<script>
-		var focusId=null;//当前聚焦文件id，用于弹出菜单对文件的操作，用来传值
+		
 		mui.init({
 		  gestureConfig:{
 		   longtap: true, //默认为false
 		  }
 		});
 		
+		mui.previewImage();
 
-
-		alert(JSON.stringify(jsonFileList.createFileList(30,10))); 
+		//alert(JSON.stringify(jsonFileList.createFileList(30,10))); 
 
 		function refreshThisPage(){
 			//从后台获取数据，并对页面所有信息进行更改
-			var u = document.getElementById("fileClassShow");
-			refreshDom(u,jsonFileList.createFileList(30,10)); 
+			var fileShowElement = document.getElementById("fileClassShow");
+			var fileClassElementList = document.getElementsByName("fileClassSelectElement");
+			fileShowElement.innerHTML="";//刷新前，必须移除原来内容
+			deleteAllChild(fileClassElementList);//刷新前，必须移除原来内容
+			refreshDom(fileShowElement,fileClassElementList,jsonFileList.createFileList(30,10)); 
+			//长按某项，执行该函数
+			mui(".mui-media-body").on('longtap','.itemLink',function(){
+			  //获取id
+			  //var id = this.getAttribute("id");
+			  //alert(this.id);
+			  focusId=this.id;
+			  mui('#mui-popover-longtapItem').popover('show',document.getElementById(this.id));
+			}); 
+			
+			//单击某项，执行该函数
+			mui(".mui-media-body").on('tap','.itemLink',function(){
+			  focusId=this.id;
+			  var FileRemark = document.getElementById(focusId).getAttribute("data-FileRemark");
+			  //alert(FileRemark);
+			  document.getElementById("itemMoreInfo").innerHTML=FileRemark; 
+			  if(FileRemark){
+			  	mui('#mui-popover-tapItem').popover('show',document.getElementById(focusId));
+			  }
+			  
+			  
+			}); 
 		} 
+		function deleteAllChild(elementList){//删除参数数组每个元素的所有子节点
+			for(var i=0;i<elementList.length;i++){
+				elementList[i].innerHTML="";
+			}
+		}
+		function closeAllFileList(){//关闭所有文件列表，之后才能操作底部三个按钮
+	
+			var fileListElementList = document.getElementsByClassName("mui-active");
+			for(var i=0;i<fileListElementList.length;i++){
+				var className = fileListElementList[i].getAttribute("class");
+				className = className.replace("mui-active","");
+				fileListElementList[i].setAttribute("class",className); 
+			}
+			//alert(fileListElementList.length);
+		}
 		refreshThisPage();
 		//点击某项，执行该函数
 		function tapIn(id){
 			alert(id); 
 		}
-		//长按某项，执行该函数
-		mui(".mui-media-body").on('longtap','.itemLink',function(){
-		  //获取id
-		  //var id = this.getAttribute("id");
-		  //alert(this.id);
-		  focusId=this.id;
-		  mui('#mui-popover-tapItem').popover('show',document.getElementById(this.id));
-		}); 
+		
 		
 		//以下函数执行后都应该刷新页面
 		function downloadFile(){
@@ -269,10 +483,12 @@
 		
 		//文件上传，弹出菜单
 		function uploadFile(){
-			mui('#popover_selectFile').popover('show',document.getElementById("popover_upFile"));
+			closeAllFileList();
+			mui('#popover_selectFile').popover('show',document.getElementById("btn1"));
 		}
 		function uploadFileAction(){
-			var fileClass = document.getElementById("uploadFileClass");
+			var fileClass = document.getElementById("uploadFileClass").value;
+			var fileRemark = document.getElementById("fileRemark").value;
 			var file = document.getElementById("file");
 			var fd = new FormData();
 			fd.append("file", file);
@@ -284,7 +500,8 @@
 		}
 		//添加文件分类,弹出菜单
 		function addFileClass(){
-			mui('#popover_addFileClass').popover('show',document.getElementById("popover_upFile"));
+			closeAllFileList();
+			mui('#popover_addFileClass').popover('show',document.getElementById("btn2"));
 		}
 		function addFileClassAction(){
 			var className = document.getElementById("fileClassName").value;
@@ -296,16 +513,19 @@
 		}
 		//删除分类弹出菜单
 		function deleteFileClass(){
-			mui('#popover_deleteFileClass').popover('show',document.getElementById("popover_upFile"));
+			closeAllFileList();
+			mui('#popover_deleteFileClass').popover('show',document.getElementById("btn3"));
 		}
 		function deleteFileClassAction(){
 			
 			var deleteClassName = document.getElementById("deleteFileClass").value;
 			//ajax传送
 			alert(deleteClassName);
-			//刷新页面
+			//刷新页面 
 			mui('#popover_deleteFileClass').popover('hide',document.getElementById("popover_upFile"));
 			refreshThisPage();
-		}
+		} 
+		
+		
 	</script>
 </html>

@@ -1036,7 +1036,8 @@
 					"tab-webview-subpage-contact.html",
 					"tab-webview-subpage-file.html",
 					"tab-webview-subpage-edit.html",
-					"tab-webview-subpage-list.html"
+					"tab-webview-subpage-list.html",
+					"test.html"
 				],
 				"priority": 0
 			},
@@ -1153,7 +1154,24 @@
 					"js/mui.min.js",
 					"fonts/mui.ttf",
 					"css/mui.min.css",
-					"js/my/test.js"
+					"js/my/test.js",
+					"images/contact-01.png",
+					"/images/wenjian.svg",
+					"images/wenjian.svg",
+					"images/wenjian.png",
+					"images/fileTypeIcon/ppt.png",
+					"images/fileTypeIcon/word.png",
+					"images/fileTypeIcon/file.png",
+					"images/fileTypeIcon/video.png",
+					"js/jquery-2.2.2.js",
+					"js/jquery-1.8.3.min.js",
+					"js/js_lightbox/scriptaculous.js",
+					"js/js_lightbox/effects.js",
+					"js/js_lightbox/prototype.js",
+					"js/js_lightbox/lightbox.js",
+					"css/css_lightbox/lightbox.css",
+					"js/mui.zoom.js",
+					"js/mui.previewimage.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -1202,7 +1220,9 @@
 					"js/ckeditor_full/plugins/smiley/images/teeth_smile.png",
 					"js/ckeditor_full/plugins/specialchar/dialogs/lang/zh-cn.js",
 					"js/ckeditor_full/plugins/specialchar/dialogs/specialchar.js",
-					"js/ckeditor_full/plugins/link/dialogs/anchor.js"
+					"js/ckeditor_full/plugins/link/dialogs/anchor.js",
+					"js/my/test.js",
+					"test.html"
 				],
 				"refer": [],
 				"priority": 0
@@ -1236,6 +1256,14 @@
 				"refer": [
 					"t2.html"
 				],
+				"priority": 0
+			},
+			"test.html": {
+				"resources": [
+					"fonts/mui.ttf",
+					"images/contact-01.png"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},

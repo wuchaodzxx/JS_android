@@ -34,30 +34,64 @@
 			<form id="paperForm" class="mui-input-group">
 					<div class="mui-input-row">
 						<label>标题</label>
-						<input id="paperTitle" type="text" placeholder="普通输入框">
+						<input id="paperTitle" type="text" placeholder="在这里输入文章标题">
 					</div>
 					<div class="mui-input-row">
 						<label>分类</label>
-						<select id="paperClass" class="mui-select">
-							 <option value="divcss5">divcss5</option>
-					         <option value="DIVCSS5">DIVCSS5</option>
+						<select name="paperClassSelectElement" id="paperClass" class="mui-select">
+							 <option value="分类1">分类1</option>
+					         <option value="分类2">分类2</option>
 						</select>
 					</div>
 					
 					
 			</form>
+			
+			
+			
 			<div class="mui-input-row" style="margin: 10px 0px 0px 0px;">
 				<textarea id="contentEdit" form="paperForm" style="height: 100px;"></textarea>
 			</div>
 			
-			<div class="mui-button-row" style="margin: 5px 0px 5px 0px;">
-				<button type="button" class="mui-btn mui-btn-primary" onclick="uploadPaper()">发表</button>&nbsp;&nbsp;
-				
+			<div class="mui-button-row" style="align-content: center;margin-top: 5px;">
+				<button id="btn1" type="button" class="mui-btn mui-btn-primary" onclick="uploadPaper()">上传文章</button>&nbsp;&nbsp;
+				<button id="btn2" type="button" class="mui-btn mui-btn-primary" onclick="addPaperClass()">添加分类</button>&nbsp;&nbsp;
+				<button id="btn3" type="button" class="mui-btn mui-btn-primary" onclick="deletePaperClass()">删除分类</button>&nbsp;&nbsp;
 			</div>
+			
+			<!--弹窗菜单:添加文件分类的操作-->
+		<div id="popover_addPaperClass" class="mui-popover">
+		  <ul class="mui-table-view">
+		    <li class="mui-table-view-cell">
+		    	类名:<input type="text" name="" id="paperClassName" value=""  /> 
+		    </li>
+		    <li class="mui-table-view-cell">
+		    	<input type="button" name="添加" id="" class="" value="添加" onclick="addPaperClassAction()"/>
+		    </li>
+		  </ul>
+		</div>
+		
+		<!--弹窗菜单:删除文件分类的操作-->
+		<div id="popover_deletePaperClass" class="mui-popover">
+		  <ul class="mui-table-view">
+		    <div class="mui-input-row">
+						<label>删除分类</label>
+						<select name="paperClassSelectElement" id="deletePaperClass" class="mui-select">
+							 <option value="分类1">分类1</option>
+					         <option value="分类2">分类2</option>
+						</select>
+			</div>
+			<li class="mui-table-view-cell">
+		    	<input type="button" name="删除" id="" class="" value="删除" onclick="deletePaperClassAction()"/>
+		    </li>
+		  </ul>
+		</div>
+		
 			
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
+	<script src="js/my/test.js"></script>
 	<script src="js/ckeditor_full/ckeditor.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		
@@ -74,10 +108,57 @@
 		   longtap: true, //默认为false
 		  }
 		});
+		
+		
 		//初始化类别列表
-		(function paperClassInit(){
+		function paperClassInit(){
+			//读取文章类,后期使用ajax获取
+			var paperClassList = window.jsonPaperList.createPaperClassList().paperClassList; 
+			var paperClassElementList = document.getElementsByName("paperClassSelectElement");
+			deleteAllChild(paperClassElementList);
+			for(var i=0;i<paperClassElementList.length;i++){
+				for(var j=0;j<paperClassList.length;j++){
+					var opt = document.createElement("option");
+					opt.value = paperClassList[j];
+					opt.innerHTML = paperClassList[j];
+					paperClassElementList[i].appendChild(opt); 
+				}
+			}
+		};
+		paperClassInit();
+		function deleteAllChild(elementList){//删除参数数组每个元素的所有子节点
+			for(var i=0;i<elementList.length;i++){
+				elementList[i].innerHTML="";
+			}
+		}
+		
+		//添加文章分类,弹出菜单
+		function addPaperClass(){
+			mui('#popover_addPaperClass').popover('show',document.getElementById("btn2"));
+		}
+		function addPaperClassAction(){
+			var className = document.getElementById("paperClassName").value;
+			//ajax传送
+			alert(className);
+			//刷新页面
+			mui('#popover_addPaperClass').popover('hide');
+			paperClassInit();
+		}
+		//删除分类弹出菜单
+		function deletePaperClass(){
 			
-		}());
+			mui('#popover_deletePaperClass').popover('show',document.getElementById("btn3"));
+		}
+		function deletePaperClassAction(){
+			
+			var deleteClassName = document.getElementById("deletePaperClass").value;
+			//ajax传送
+			alert(deleteClassName);
+			//刷新页面 
+			mui('#popover_deletePaperClass').popover('hide');
+			paperClassInit();
+		} 
+		
 		function uploadPaper(){
 			var paperTitle = document.getElementById("paperTitle").value;
 			var paperContent = CKEDITOR.instances.contentEdit.getData();
