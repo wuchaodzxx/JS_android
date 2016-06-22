@@ -128,92 +128,84 @@ function createPaperElement(paperId,paperName,paperDate,paperAuthor,paperAbstrac
 			};
 }(mui, window.jsonFileList = {}));
 
-function refreshPaperDom(fileShowElement,fileClassElementList,jsonData){
+function refreshPaperDom(paperShowElement,paperClassElementList,jsonData){
 	/*
 	 * 函数有三个参数
-	 * 1，fileShowElement：文件列表显示区域的element
+	 * 1，paperShowElement：文件列表显示区域的element
 	 * 2，fileClassElement：是一个数组，每个元素都是一个用于选择文件类的select元素
 	 * 
 	 * Dom更新包含两部分，第一部分是要根据json数据更新文件列表，第二部分是更新类别列表，类别列表有两个。
 	 */
-	var fileClassList=jsonData.fileClassList;//数组
-	var fileList=jsonData.fileList;//数组
+	var paperClassList=jsonData.paperClassList;//数组 
+	var paperList=jsonData.paperList;//数组
 	var li_element_array=new Array();
 	
 	//以下根据类别数，分别生成对应的显示区域
-	for(var i=0;i<fileClassList.length;i++){
+	for(var i=0;i<paperClassList.length;i++){
+		//alert("145:"+i);
 		var li = document.createElement("li");
-		fileShowElement.appendChild(li);
+		paperShowElement.appendChild(li);
 		li.className="mui-table-view-cell mui-collapse ";
 			var a = document.createElement("a");
 			a.className="mui-navigate-right";
 			a.href="#";
-			a.innerHTML=fileClassList[i];
+			a.innerHTML=paperClassList[i];
 		li.appendChild(a,li.firstChild);
 			var div = document.createElement("div");
 			div.className="mui-collapse-content";
 		li.appendChild(div);
-		li_element_array[fileClassList[i]]=div;
+		li_element_array[paperClassList[i]]=div;
 	}
 	
 	//把每个具体的文件，根据其类别，放在对应的显示区
-	for(var i=0;i<fileList.length;i++){
+	for(var i=0;i<paperList.length;i++){
 		var div = document.createElement("div");
 		div.className="mui-table-view-cell mui-media";
 			var div2 = document.createElement("div");
 			div2.className="mui-media-body";
 			div.appendChild(div2);
 				var a = document.createElement("a");
-				a.id=fileList[i].fileId;
+				a.id=paperList[i].paperId;
 				a.className="itemLink";
-				a.setAttribute("data-Type",fileList[i].fileType);
-				a.setAttribute("data-FileUrl",fileList[i].fileUrl);
-				a.setAttribute("data-FileRemark",fileList[i].fileRemark);
-				//a.href=fileList[i].fileUrl;
+//				a.setAttribute("data-Type",paperList[i].fileType);
+//				a.setAttribute("data-FileUrl",paperList[i].fileUrl);
+//				a.setAttribute("data-FileRemark",paperList[i].fileRemark);
+				//a.href=paperList[i].fileUrl;
 				
-				div2.appendChild(a);
+				div2.appendChild(a);   
 				
-				
-				if(fileList[i].fileType=="image"){
-					
-					var img = document.createElement("img");
-					img.className = "mui-media-object mui-pull-left";
-					img.src=fileList[i].fileUrl;
-					a.appendChild(img);
-					a.addEventListener("click",function(e){alert("image");});
-				}else{
-					var img = document.createElement("img");
-					img.className = "mui-media-object mui-pull-left";
-					img.src="images/fileTypeIcon/"+fileList[i].fileType+".png";
-					a.appendChild(img);
-					
-				}
-				
-				
-				
+		
 				var div3 = document.createElement("div");
-				var str = fileList[i].fileName+"<br/>"+"<span style='color:#F0AD4E; font-size: 13px;'>文件大小：<span id='author' >"+
-				fileList[i].fileSize+"</span></span><br/><span style='color:#F0AD4E;font-size: 13px;'>时间：<span id='author' >"+
-				fileList[i].fileDate+"</span></span>"+"<p class='mui-ellipsis-2'>"+fileList[i].fileRemark+"</p>";
+				var str = paperList[i].paperName+"<br/>"+"<span style='color:#F0AD4E; font-size: 13px;'>时间：<span id='author' >"+
+				paperList[i].paperDate+"</span></span><br/><span style='color:#F0AD4E;font-size: 13px;'> <span class='mui-col-xs-6'>"+
+				paperList[i].paperContent+"</span></span>";
 				
 				div3.innerHTML=str;
 				a.appendChild(div3);
-		li_element_array[fileList[i].fileClass].appendChild(div);	
+//				alert(paperList[i].paperClass); 
+		li_element_array[paperList[i].paperClass].appendChild(div);	
 		
 				
 				 
 		
 	}
 	
-	//以下对fileClassElement进行更新
-	for(var i=0;i<fileClassElementList.length;i++){
-		for(var j=0;j<fileClassList.length;j++){
-			var opt = document.createElement("option");
-			opt.value = fileClassList[j];
-			opt.innerHTML = fileClassList[j];
-			fileClassElementList[i].appendChild(opt); 
-		}
-	}
+	//长按某项，执行该函数
+			mui(".mui-media-body").on('longtap','.itemLink',function(){
+			  //获取id
+			  var id = this.getAttribute("id");
+			  alert(this.id);
+			  focusId=this.id;
+			  mui('#mui-popover-longtapItem').popover('show',document.getElementById(this.id));
+			}); 
+			
+			//单击某项，执行该函数
+			mui(".mui-media-body").on('tap','.itemLink',function(){
+			  focusId=this.id;
+			  alert("205"+"tap");
+			  
+			  
+			});  
 	
 
 }
@@ -248,6 +240,130 @@ function getPaperListByAjax(){
 				}
 			});	
 	return ajaxData;
+}
+
+function sendNewPaperByAjax(paper){
+	var stateText = localStorage.getItem('$state') || "{}";
+	var state = JSON.parse(stateText);
+	var blog ={};
+	blog.name = paper.paperTitle;
+	blog.content = paper.paperContent;
+	blog.className = paper.paperClass;
+	blog.author = state.name;
+	mui.ajax('http://139.129.34.134/share/mobile/sendNewPaper.do',{
+				data:JSON.stringify(blog),
+				dataType:'json',//服务器返回json格式数据
+				contentType: "application/json",
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Content-Type':'application/json'},	
+				async:false,
+				success:function(data){
+					//alert(data.status);
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					mui.toast("上传成功");
+				
+				},
+				error:function(xhr,type,errorThrown){
+					//异常处理；
+					mui.toast("上传失败");
+				},
+				headers: { 
+					'Access-Control-Allow-Headers':'X-Requested-With'
+				}
+			});	
+}
+function sendReEditPaperByAjax(paper){
+	var stateText = localStorage.getItem('$state') || "{}";
+	var state = JSON.parse(stateText);
+	var blog ={};
+	blog.name = paper.paperTitle;
+	blog.content = paper.paperContent;
+	blog.className = paper.paperClass;
+	blog.id = paper.paperId;
+	blog.author = state.name;
+	mui.ajax('http://139.129.34.134/share/mobile/sendReEditPaper.do',{
+				data:JSON.stringify(paper),
+				dataType:'json',//服务器返回json格式数据
+				contentType: "application/json",
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Content-Type':'application/json'},	
+				async:false,
+				success:function(data){
+					//alert(data.status);
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					mui.toast("上传成功");
+				
+				},
+				error:function(xhr,type,errorThrown){
+					//异常处理；
+					mui.toast("上传失败");
+				},
+				headers: { 
+					'Access-Control-Allow-Headers':'X-Requested-With'
+				}
+			});	
+}
+
+function addPaperClassByAjax(className){
+	var stateText = localStorage.getItem('$state') || "{}";
+	var state = JSON.parse(stateText);
+	var jsonData = {};
+	jsonData.username = state.name;
+	jsonData.className = className;
+	mui.ajax('http://139.129.34.134/share/mobile/addPaperClass.do',{
+				data:JSON.stringify(jsonData),
+				dataType:'json',//服务器返回json格式数据
+				contentType: "application/json",
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Content-Type':'application/json'},	
+				async:false,
+				success:function(data){
+					//alert(data.status);
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					mui.toast("上传成功");
+				
+				},
+				error:function(xhr,type,errorThrown){
+					//异常处理；
+					mui.toast("上传失败");
+				},
+				headers: { 
+					'Access-Control-Allow-Headers':'X-Requested-With'
+				}
+			});	
+}
+
+function deletePapersClassByAjax(deleteClassName){
+	var stateText = localStorage.getItem('$state') || "{}";
+	var state = JSON.parse(stateText);
+	var jsonData = {};
+	jsonData.username = state.name;
+	jsonData.className = deleteClassName;
+	mui.ajax('http://139.129.34.134/share/mobile/addPaperClass.do',{
+				data:JSON.stringify(jsonData),
+				dataType:'json',//服务器返回json格式数据
+				contentType: "application/json",
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Content-Type':'application/json'},	
+				async:false,
+				success:function(data){
+					//alert(data.status);
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					mui.toast("上传成功");
+				
+				},
+				error:function(xhr,type,errorThrown){
+					//异常处理；
+					mui.toast("上传失败");
+				},
+				headers: { 
+					'Access-Control-Allow-Headers':'X-Requested-With'
+				}
+			});	
 }
 //<div class="mui-table-view-cell mui-media">
 //	<div id="123" class="mui-media-body">

@@ -137,6 +137,10 @@
 		}
 		function addPaperClassAction(){
 			var className = document.getElementById("paperClassName").value;
+			if(className.length<1||className==null){
+				mui.toast("请输入类名");
+				return;
+			}
 			//ajax传送
 			addPaperClassByAjax(className);
 		

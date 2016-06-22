@@ -309,6 +309,7 @@
 			paperShowElement.innerHTML="";//刷新前，必须移除原来内容
 			deleteAllChild(paperClassElementList);//刷新前，必须移除原来内容
 			jsonData = getPaperListByAjax();
+			//alert(JSON.stringify(jsonData));
 			//jsonData = jsonPaperList.createPaperList(50);
 			refreshPaperDom(paperShowElement,paperClassElementList,jsonData); 
 		}
@@ -390,6 +391,7 @@
 		//下拉刷新
 		function pulldownRefresh(){
 			refreshThisPage();
+			alert("pull over");
 			mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 				
 		}
