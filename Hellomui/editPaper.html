@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/app.css"/>
+		
+		<style>
+			html,body {
+				background-color: #efeff4;
+			}
+			.title{
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+			 
+		</style>
+	</head>
+
+	<body>
+		<div id="main" class="mui-content"> 
+			<header class="mui-bar ">
+				<h1 id="title" class="mui-title">写文章</h1>
+			</header>
+		
+			<form id="paperForm" class="mui-input-group">
+					<div class="mui-input-row">
+						<label>标题</label>
+						<input id="paperTitle" type="text" placeholder="在这里输入文章标题">
+					</div>
+					<div class="mui-input-row">
+						<label>分类</label>
+						<select name="paperClassSelectElement" id="paperClass" class="mui-select">
+							 <option value="分类1">分类1</option>
+					         <option value="分类2">分类2</option>
+						</select>
+					</div>
+					
+					
+			</form>
+			
+			
+			
+			<div class="mui-input-row" style="margin: 10px 0px 0px 0px;">
+				<textarea id="contentEdit" form="paperForm" style="height: 100px;"></textarea>
+			</div>
+			
+			<div class="mui-button-row" style="align-content: center;margin-top: 5px;">
+				<button id="btn1" type="button" class="mui-btn mui-btn-primary" onclick="uploadPaper()">上传文章</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button id="btn2" type="button" class="mui-btn mui-btn-primary" onclick="addPaperClass()">添加分类</button>
+				
+			</div>
+			
+			<!--弹窗菜单:添加文件分类的操作-->
+		<div id="popover_addPaperClass" class="mui-popover">
+		  <ul class="mui-table-view">
+		    <li class="mui-table-view-cell">
+		    	类名:<input type="text" name="" id="paperClassName" value=""  /> 
+		    </li>
+		    <li class="mui-table-view-cell">
+		    	<input type="button" name="添加" id="" class="" value="添加" onclick="addPaperClassAction()"/>
+		    </li>
+		  </ul>
+		</div>
+		
+		
+	
+	</body>
+	<script>
+		window.paper={};//保存编辑文章内容； 
+		window.reEditPaper=false;//判断该页面是否是重新编辑，false表示新增文章
+		window.paperContent=null;
+		window.paperName = null;
+		window.paperClass =null;
+		window.paperId =null;
+		window.ajaxData=null;
+	</script>
+	<script src="js/mui.min.js"></script>
+	<script src="js/my/paperUtil.js"></script>
+	<script src="js/ckeditor_full/ckeditor.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		
+		CKEDITOR.replace('contentEdit', {
+						toolbar : [
+								[ 'Bold', 'Italic', 'Underline',
+										'Subscript', 'Superscript' ],
+								[ 'Link', 'Anchor' ,'Image','Smiley', 'SpecialChar'],
+								'/',
+								['FontSize','TextColor', 'BGColor' ]
+								]});
+		mui.init({
+		  gestureConfig:{ 
+		   longtap: true, //默认为false
+		  }
+		});
+		
+		
+		//初始化类别列表
+		function paperClassInit(){
+			//读取文章类,后期使用ajax获取
+//			var paperClassList = window.jsonPaperList.createPaperClassList().paperClassList; 
+			ajaxData = getPaperListByAjax();
+			var paperClassList = ajaxData.paperClassList;
+			
+			var paperClassElementList = document.getElementsByName("paperClassSelectElement");
+			deleteAllChild(paperClassElementList);
+			for(var i=0;i<paperClassElementList.length;i++){
+				for(var j=0;j<paperClassList.length;j++){
+					var opt = document.createElement("option");
+					opt.value = paperClassList[j];
+					opt.innerHTML = paperClassList[j];
+					paperClassElementList[i].appendChild(opt); 
+				}
+			}
+			
+			
+		};
+		paperClassInit();
+		function deleteAllChild(elementList){//删除参数数组每个元素的所有子节点
+			for(var i=0;i<elementList.length;i++){
+				elementList[i].innerHTML="";
+			}
+		}
+		
+		//添加文章分类,弹出菜单
+		function addPaperClass(){
+			mui('#popover_addPaperClass').popover('show',document.getElementById("btn2"));
+		}
+		function addPaperClassAction(){
+			var className = document.getElementById("paperClassName").value;
+			//ajax传送
+			addPaperClassByAjax(className);
+		
+			//刷新页面
+			mui('#popover_addPaperClass').popover('hide');
+			paperClassInit();
+		}
+		
+		
+		function uploadPaper(){
+			paper.paperTitle = document.getElementById("paperTitle").value;
+			paper.paperContent = CKEDITOR.instances.contentEdit.getData();
+			paper.paperClass = document.getElementById("paperClass").value;
+			paper.paperId = paperId;
+			if(!paper.paperTitle){
+				mui.toast("请输入文章标题！");
+				return;
+			}else if(!paper.paperClass){
+				mui.toast("文章分类不能为空！");
+				return;
+			}else if(!paper.paperContent){
+				mui.toast("文章内容不能为空！");
+				return;
+			}
+			//下面开始上传
+			if(reEditPaper){
+				
+				sendReEditPaperByAjax(paper);
+			}else{
+				
+				sendNewPaperByAjax(paper);
+			}
+		}
+		
+		
+	</script>
+	<script>
+		
+		mui.plusReady(function (){
+			var webviewInfo = plus.webview.getWebviewById("editPaper");
+			if(webviewInfo.paperContent){
+				reEditPaper=true; 
+			}
+			paperContent = webviewInfo.paperContent; 
+			paperClass = webviewInfo.paperClass; 
+			paperName = webviewInfo.paperName; 
+			paperId = webviewInfo.paperId; 
+			
+			if(reEditPaper){
+				document.getElementById("paperTitle").value=paperName;
+				CKEDITOR.instances.contentEdit.setData(paperContent);
+				document.getElementById("paperClass").value=paperClass;
+			}
+			
+			mui.back = function() {
+				mui.confirm("退出后编辑内容不保存。","确认退出？",function(e){
+					if(e.index==1){
+						var curW = plus.webview.currentWebview();
+						plus.webview.close(curW);
+					}else{
+						return;
+					}
+					
+				});
+			};
+		
+		});
+		
+		
+	</script>
+</html> 

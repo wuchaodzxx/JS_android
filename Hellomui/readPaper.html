@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script> 
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="UTF-8">
+      	mui.init();
+    </script>
+    <style type="text/css">
+    	html,body {
+				background-color: #fffff1;
+			}
+		
+    </style>
+</head>
+<body>
+	<div style="align-content: center;">
+		
+		<p id="paperName" style="font-size: large;margin-top: 15px;text-align:center;"></p> 
+		<div style="float: right;">
+			<p id="paperDate" style="color: #DA8028;margin-right: 5px;"></p>
+		</div>
+		<br/>
+		<div style="word-wrap: break-word;margin-left: 5px;margin-right: 5px;">
+			<p id="paperContent">
+				
+			</p>
+		</div>
+		
+	</div>
+	
+	
+	
+	
+	
+	<script type="text/javascript">
+		var paperContent=null;
+		var paperName = null;
+		var paperDate =null;
+		mui.plusReady(function (){
+			var webview = plus.webview.getWebviewById("readPaper");
+			paperContent = webview.paperContent; 
+			paperName = webview.paperName; 
+			paperDate = webview.paperDate; 
+			
+			
+			document.getElementById("paperName").innerHTML=paperName;
+			document.getElementById("paperDate").innerHTML="发表时间："+paperDate;
+			document.getElementById("paperContent").innerHTML=paperContent;
+		});
+		
+	</script>
+</body>
+</html>

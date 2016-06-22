@@ -2,7 +2,7 @@
  * 演示程序当前的 “注册/登录” 等操作，是基于 “本地存储” 完成的
  * 当您要参考这个演示程序进行相关 app 的开发时，
  * 请注意将相关方法调整成 “基于服务端Service” 的实现。
- **/
+ **/ 
 (function($, owner) {
 	/** 
 	 * 用户登录
@@ -10,35 +10,51 @@
 	owner.login = function(loginInfo, callback) {
 		callback = callback || $.noop;
 		loginInfo = loginInfo || {};
-		loginInfo.account = loginInfo.account || '';
+		loginInfo.name = loginInfo.name || '';
 		loginInfo.password = loginInfo.password || '';
-		if (loginInfo.account.length < 5) {
+		if (loginInfo.name.length < 5) {
 			return callback('账号最短为 5 个字符');
 		}
 		if (loginInfo.password.length < 6) {
 			return callback('密码最短为 6 个字符');
 		}
-		var users = JSON.parse(localStorage.getItem('$users') || '[]');//用户存在本地
+		
 		
 		//判断登陆用户名和密码是否匹配，若匹配，返回登陆成功标志
-		var authed = users.some(function(user) {
-			return loginInfo.account == user.account && loginInfo.password == user.password;
-			
-		});
-		
-		//authed=true;//暂时定义by fw
-		if (authed) { 
-			
-			return owner.createState(loginInfo.account, callback);
-		} else {
-			
-			return callback('用户名或密码错误');
-		}
+		var authed = false;
+		mui.ajax('http://139.129.34.134/share/mobile/login.do',{ 
+				data:JSON.stringify(loginInfo),
+				dataType:'json',//服务器返回json格式数据
+				contentType: "application/json",
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Content-Type':'application/json'},	              
+				success:function(data){
+					//alert(data.status);
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					if(data.status=="success"){
+						authed = true;
+						return owner.createState(loginInfo.name, callback);
+					}else{
+						authed = false;
+						return callback('用户名或密码错误');
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					//异常处理；
+					authed = false; 
+					return callback('用户名或密码错误');
+				},
+				headers: { 
+					'Access-Control-Allow-Headers':'X-Requested-With'
+				}
+			});	
+
 	};
 
 	owner.createState = function(name, callback) {
 		var state = owner.getState();
-		state.account = name;
+		state.name = name;
 		state.token = "token123456789";
 		
 		owner.setState(state);
@@ -52,9 +68,9 @@
 	owner.reg = function(regInfo, callback) {
 		callback = callback || $.noop;
 		regInfo = regInfo || {};
-		regInfo.account = regInfo.account || '';
+		regInfo.name = regInfo.name || '';
 		regInfo.password = regInfo.password || '';
-		if (regInfo.account.length < 5) {
+		if (regInfo.name.length < 5) {
 			return callback('用户名最短需要 5 个字符');
 		}
 		if (regInfo.password.length < 6) {
@@ -67,10 +83,33 @@
 //		users.push(regInfo);
 //		localStorage.setItem('$users', JSON.stringify(users));
 ////////////////////////以下开始注册/////////////////////////////////////////////
-		
-
+		mui.ajax('http://139.129.34.134/share/mobile/regist.do',{
+			data:JSON.stringify(regInfo),
+			dataType:'json',//服务器返回json格式数据
+			contentType: "application/json",
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			headers:{'Content-Type':'application/json'},	              
+			success:function(data){
+				//服务器返回响应，根据响应结果，分析是否登录成功；
+				if(data.status=="userExsit"){
+					return callback('用户名已存在');
+				}else if(data.status=="success"){
+					return callback();
+				}
+				return callback('服务器暂时无法完成你的请求');
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				alert("访问服务器失败，请确认网络正常"); 
+			},
+			headers: { 
+				'Access-Control-Allow-Headers':'X-Requested-With'
+			}
+		});
+ 		
 ////////////////////////////////////////////////////////////////////////////////
-		return callback();
+		
 	};
 
 	/**
@@ -160,4 +199,4 @@
 			}
 		}
 	}
-}(mui, window.app = {}));
+}(mui, window.accountUtil = {}));

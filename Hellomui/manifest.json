@@ -66,7 +66,7 @@
 		"splashscreen": {
 			"autoclose": true,/*如果为true，程序启动的图片可以自动关闭，如果为false，开发者需要手动关闭*/
 			"waiting": true,
-			"delay": "2000"
+			"delay": "0"
 		},
 		"runmode": "normal",/*两个值，liberate或normal，前者在应用安装时释放资源，后者不需要释放资源*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
@@ -1037,7 +1037,8 @@
 					"tab-webview-subpage-file.html",
 					"tab-webview-subpage-edit.html",
 					"tab-webview-subpage-list.html",
-					"test.html"
+					"test.html",
+					"tab-webview-subpage-paper.html"
 				],
 				"priority": 0
 			},
@@ -1047,7 +1048,8 @@
 					"css/mui.min.css",
 					"js/app.js",
 					"js/mui.enterfocus.js",
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"js/my/accountUtil.js"
 				],
 				"refer": [
 					"main.html",
@@ -1112,7 +1114,9 @@
 			},
 			"about.html": {
 				"resources": [
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -1124,9 +1128,13 @@
 					"main_pullrefresh_sub.html",
 					"fonts/mui.ttf",
 					"js/test.js",
-					"js/my/test.js"
+					"js/my/test.js",
+					"js/my/paperUtil.js"
 				],
-				"refer": [],
+				"refer": [
+					"editPaper.html",
+					"readPaper.html"
+				],
 				"priority": 0
 			},
 			"main_pullrefresh_sub.html": {
@@ -1171,7 +1179,8 @@
 					"js/js_lightbox/lightbox.js",
 					"css/css_lightbox/lightbox.css",
 					"js/mui.zoom.js",
-					"js/mui.previewimage.js"
+					"js/mui.previewimage.js",
+					"js/my/fileUtil.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -1261,7 +1270,116 @@
 			"test.html": {
 				"resources": [
 					"fonts/mui.ttf",
-					"images/contact-01.png"
+					"images/contact-01.png",
+					"js/ckeditor_full/skins/moonocolor/editor.css",
+					"js/ckeditor_full/lang/zh-cn.js",
+					"js/ckeditor_full/config.js",
+					"js/ckeditor_full/contents.css",
+					"js/ckeditor_full/styles.js",
+					"js/ckeditor_full/skins/moonocolor/skin.js",
+					"js/ckeditor_full/skins/moonocolor/icons_hidpi.png",
+					"js/my/test.js",
+					"js/mui.min.js",
+					"css/app.css",
+					"css/mui.min.css",
+					"js/ckeditor_full/ckeditor.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"tab-webview-subpage-paper.html": {
+				"resources": [
+					"js/my/test.js",
+					"css/app.css",
+					"js/ckeditor_full/ckeditor.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"images/contact-01.png",
+					"js/my/paperUtil.js"
+				],
+				"refer": [
+					"test.html",
+					"editPaper.html",
+					"readPaper.html"
+				],
+				"priority": 0
+			},
+			"editPaper.html": {
+				"resources": [
+					"js/ckeditor_full/skins/moonocolor/editor.css",
+					"js/my/test.js",
+					"js/ckeditor_full/lang/zh-cn.js",
+					"js/mui.min.js",
+					"css/app.css",
+					"js/ckeditor_full/config.js",
+					"js/ckeditor_full/contents.css",
+					"css/mui.min.css",
+					"js/ckeditor_full/styles.js",
+					"js/ckeditor_full/skins/moonocolor/skin.js",
+					"js/ckeditor_full/ckeditor.js",
+					"js/ckeditor_full/skins/moonocolor/icons_hidpi.png",
+					"js/my/paperUtil.js",
+					"js/ckeditor_full/skins/moonocolor/dialog.css",
+					"js/ckeditor_full/skins/moonocolor/images/hidpi/close.png",
+					"js/ckeditor_full/plugins/specialchar/dialogs/lang/zh-cn.js",
+					"js/ckeditor_full/plugins/specialchar/dialogs/specialchar.js",
+					"js/ckeditor_full/skins/moonocolor/images/hidpi/refresh.png",
+					"js/ckeditor_full/skins/moonocolor/images/hidpi/lock.png",
+					"js/ckeditor_full/plugins/image/dialogs/image.js",
+					"js/ckeditor_full/plugins/smiley/images/wink_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/embarrassed_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/shades_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/confused_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/devil_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/angel_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/whatchutalkingabout_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/lightbulb.png",
+					"js/ckeditor_full/plugins/smiley/images/broken_heart.png",
+					"js/ckeditor_full/plugins/smiley/images/envelope.png",
+					"js/ckeditor_full/plugins/smiley/images/omg_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/regular_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/thumbs_down.png",
+					"js/ckeditor_full/plugins/smiley/images/thumbs_up.png",
+					"js/ckeditor_full/plugins/smiley/images/sad_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/angry_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/heart.png",
+					"js/ckeditor_full/plugins/smiley/images/kiss.png",
+					"js/ckeditor_full/plugins/smiley/dialogs/smiley.js",
+					"js/ckeditor_full/plugins/smiley/images/cry_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/teeth_smile.png",
+					"js/ckeditor_full/plugins/smiley/images/tongue_smile.png",
+					"js/ckeditor_full/plugins/colordialog/dialogs/colordialog.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"readPaper.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"reg.html": {
+				"resources": [
+					"fonts/mui.ttf",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"js/my/accountUtil.js"
+				],
+				"refer": [
+					"login.html"
+				],
+				"priority": 0
+			},
+			"forget_password.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0

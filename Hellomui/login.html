@@ -123,6 +123,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
 		<script src="js/app.js"></script>
+		<script src="js/my/accountUtil.js"></script>
 		<script>
 			(function($, doc) {
 				$.init({
@@ -131,8 +132,8 @@
 				$.plusReady(function() {
 					
 					plus.screen.lockOrientation("portrait-primary");
-					var settings = app.getSettings();
-					var state = app.getState();
+					var settings = accountUtil.getSettings();
+					var state = accountUtil.getState();
 					
 					
 					//初始化必要的界面
@@ -202,11 +203,11 @@
 					var forgetButton = doc.getElementById('forgetPassword');
 					loginButton.addEventListener('tap', function(event) {
 						var loginInfo = {
-							account: accountBox.value,
+							name: accountBox.value,
 							password: passwordBox.value
 						};
 						
-						app.login(loginInfo, function(err) {
+						accountUtil.login(loginInfo, function(err) {
 							if (err) {
 								plus.nativeUI.toast(err);
 								return;
@@ -222,7 +223,7 @@
 						setTimeout(function() {
 							var isActive = event.detail.isActive;
 							settings.autoLogin = isActive;
-							app.setSettings(settings);
+							accountUtil.setSettings(settings);
 						}, 50);
 					}, false);
 					regButton.addEventListener('tap', function(event) {

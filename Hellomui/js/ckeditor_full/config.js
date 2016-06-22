@@ -11,7 +11,7 @@ CKEDITOR.editorConfig = function( config ) {
 	
 	config.image_previewText=' '; //预览区域显示内容  
     config.filebrowserImageUploadUrl= "http://139.129.34.134/share/private/imageUpload.do"; //要上传的action或servlet 
-    config.height = 300; //高度
+    config.height = 390; //高度 
     config.resize_enabled = false;// 取消 “拖拽以改变尺寸”
     config.enterMode = CKEDITOR.ENTER_BR;
     config.shiftEnterMode = CKEDITOR.ENTER_P;

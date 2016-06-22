@@ -26,24 +26,18 @@
 			<div class="mui-scroll">
 				<!--数据列表-->
 				<ul class="mui-table-view mui-table-view-chevron">
-					<li class="mui-table-view-cell mui-media">
-						<a id="1234" class="paperLink" href="javascript:;">
-							<div class="mui-media-body">
-								幸福<br/>  
-								<span style="color:#F0AD4E; font-size: 13px;">作者：<span id="author" >陈陈</span></span>
-								<br/> 
-								<span style="color:#F0AD4E;font-size: 13px;">时间：<span id="author" >2014-03-04</span></span>
-								<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-							</div>
-						</a>
-					</li>
+					
 				
 				</ul>
 			</div>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
-	<script src="js/my/test.js"></script>
+	<script src="js/my/paperUtil.js"></script>
+	<script>
+		window.focusId=null;//当前聚焦文件id，用于弹出菜单对文件的操作，用来传值
+		window.ajaxData=null;
+	</script>
 	<script>
 		mui.init({
 				swipeBack: false,
@@ -60,22 +54,15 @@
 			});
 			
 			
-			var paperList=jsonPaperList.createPaperList(50);
+//			var paperList=jsonPaperList.createPaperList(50);
+//			var paperNumbers=paperList.paperList.length;//统计用户文章总数目
+			//
+			jsonData = getPaperListByAjax();
+			var paperList = jsonData.paperList;
 			var paperNumbers=paperList.paperList.length;//统计用户文章总数目
+			
 			//初始化，显示部分文章列表
-			(function(){
-				//alert(paperList.paperList[0]);
-				//在实际业务中，在这行应该对paperList进行获取服务器的实时数据，同时更新paperNumbers的值
-				var table = document.body.querySelector('.mui-table-view');
-					for (var i = 0; i < 10; i++) {
-						if(i<=paperList.paperList.length){
-							var paperElement = createPaperElement(paperList.paperList[i].paperId,paperList.paperList[i].paperName,paperList.paperList[i].paperDate,paperList.paperList[i].paperAuthor,paperList.paperList[i].paperAbstract);
-							//下拉刷新，新纪录插到最前面；
-							table.insertBefore(paperElement, table.firstChild); 
-						}
-						
-					}
-			}());
+			pulldownRefresh(); 
 			/**
 			 * 下拉刷新具体业务实现
 			 */
@@ -91,22 +78,32 @@
 					//重新显示
 					(function(){
 						//在实际业务中，在这行应该对paperList进行获取服务器的实时数据，同时更新paperNumbers的值
+						//ajax获取paperList
+						jsonData = getPaperListByAjax();
+						paperList = jsonData.paperList;
+						paperNumbers=paperList.paperList.length;//统计用户文章总数目
 						//alert(paperList.paperList[0]);
 						var table = document.body.querySelector('.mui-table-view');
+						table.innerHTML="";
 						for (var i = 0; i < 10; i++) {
 							if(i<=paperList.paperList.length){
-								var paperElement = createPaperElement(paperList.paperList[i].paperId,paperList.paperList[i].paperName,paperList.paperList[i].paperDate,paperList.paperList[i].paperAuthor,paperList.paperList[i].paperAbstract);
+								var paperElement = createPaperElement(paperList.paperList[i]);
 								//下拉刷新，新纪录插到最前面；
 								table.insertBefore(paperElement, table.firstChild); 
 							}
-						
 						}
+						
 					}());
 					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 				}, 1000);//实际开发，可能需要减小timeout的时间
+				
+				
 			}
 			
-			
+			function getPaperListByAjax(){
+				paperList=jsonPaperList.createPaperList(50);
+			 	paperNumbers=paperList.paperList.length;//统计用户文章总数目
+			}
 			
 			/**
 			 * 上拉加载具体业务实现
@@ -128,10 +125,11 @@
 							mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
 						}
 						
-						var paperElement = createPaperElement(paperList.paperList[i].paperId,paperList.paperList[i].paperName,paperList.paperList[i].paperDate,paperList.paperList[i].paperAuthor,paperList.paperList[i].paperAbstract);
+						var paperElement = createPaperElement(paperList.paperList[i]);
 						table.appendChild(paperElement); 
 					}
 				}, 1500);
+			
 			}
 			
 	</script>
