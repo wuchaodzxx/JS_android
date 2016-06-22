@@ -11,24 +11,30 @@
     <script src="js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" charset="UTF-8">
     //获取用户信息
-	info={};
-	info.username='mobile15';
-	info.className = "默认分组2";
-	mui.ajax('http://localhost:8080/share/mobile/deletePapersClass.do',{
-				data:JSON.stringify(info),
+	var blog ={};
+	blog.name = "paper.paperTitle";
+	blog.content = "paper.paperContent";
+	blog.className = "默认分组";
+	blog.id = "64";
+	blog.author = "mobile15";
+	mui.ajax('http://localhost:8080/share/mobile/sendReEditPaper.do',{
+				data:JSON.stringify(blog),
 				dataType:'json',//服务器返回json格式数据
 				contentType: "application/json",
 				type:'post',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
-				headers:{'Content-Type':'application/json'},	              
+				headers:{'Content-Type':'application/json'},	
+				async:false,
 				success:function(data){
 					//alert(data.status);
 					//服务器返回响应，根据响应结果，分析是否登录成功；
-					return data;
+					mui.toast("上传成功");
+				
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
-					mui.toast("操作失败");
+					mui.toast("上传失败");
+				
 				},
 				headers: { 
 					'Access-Control-Allow-Headers':'X-Requested-With'

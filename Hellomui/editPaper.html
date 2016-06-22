@@ -167,8 +167,12 @@
 			}
 			//下面开始上传
 			if(reEditPaper){
+				try{
+					sendReEditPaperByAjax(paper);
+				}catch(e){
+					alert(e.message);
+				}
 				
-				sendReEditPaperByAjax(paper);
 			}else{
 				
 				sendNewPaperByAjax(paper);

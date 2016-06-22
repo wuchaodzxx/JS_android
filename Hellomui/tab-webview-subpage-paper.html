@@ -238,7 +238,7 @@
 				<!--长按 弹窗菜单:显示对文件的操作-->
 				<div id="mui-popover-longtapItem" class="mui-popover">
 				  <ul class="mui-table-view">
-				    <li class="mui-table-view-cell"><a href="#" onclick="changePaperClass()">修改分类</a></li>
+				    <!--<li class="mui-table-view-cell"><a href="#" onclick="changePaperClass()">修改分类</a></li>-->
 				    <li class="mui-table-view-cell"><a href="#" onclick="editThisPaper()">编辑文章</a></li>
 				    <li class="mui-table-view-cell"><a href="#" onclick="deletePaper()">删除文章</a></li>
 				  </ul>
@@ -312,6 +312,7 @@
 			//alert(JSON.stringify(jsonData));
 			//jsonData = jsonPaperList.createPaperList(50);
 			refreshPaperDom(paperShowElement,paperClassElementList,jsonData); 
+
 		}
 		function deleteAllChild(elementList){//删除参数数组每个元素的所有子节点
 			for(var i=0;i<elementList.length;i++){
@@ -340,36 +341,49 @@
 //			refreshThisPage();
 //		}
 		
-		/////
-		function changePaperClass(){
-			mui('#mui-popover-changePaperClass').popover('show',document.getElementById(focusId));
-		}
-		function changePaperClassAction(){
-			var fileId = focusId;
-			var className = document.getElementById("changePaperClass").value;
-			//ajax
-			alert(className+":"+fileId);
-			
-			//刷新页面
-			mui('#mui-popover-changePaperClass').popover('hide');
-			refreshThisPage();
-		}
+//		/////
+//		function changePaperClass(){
+//			mui('#mui-popover-changePaperClass').popover('show',document.getElementById(focusId));
+//		}
+//		function changePaperClassAction(){
+//			alert(focusId);
+//			var paperId = focusId;
+//			var className = document.getElementById("changePaperClass").value;
+//			//ajax
+//			
+//			changePaperClassByAjax(paperId,className);
+//			//刷新页面
+//			mui('#mui-popover-changePaperClass').popover('hide');
+//			refreshThisPage();
+//		}
 		function editThisPaper(){
 			mui('#mui-popover-longtapItem').popover('hide');
+			var paperList = jsonData.paperList;
+			
+			//找到对应的paper
+			var paper=null;
+			for(var i=0;i<paperList.length;i++){
+				if(paperList[i].paperId == focusId){
+					paper = paperList[i];
+					
+					break ;
+				}
+			}
 			var webview = mui.openWindow({url:'editPaper.html',id:'editPaper',extras:{
-				paperName:jsonData.paperList[focusId].paperName,
-				paperContent:jsonData.paperList[focusId].paperContent,
-				paperClass:jsonData.paperList[focusId].paperClass,
-				paperId:jsonData.paperList[focusId].paperId
+				paperName:paper.paperName,
+				paperContent:paper.paperContent,
+				paperClass:paper.paperClass,
+				paperId:paper.paperId
 			}});
 		}
 		//
 		function deletePaper(){
 			//通过ajax删除
-			
+			var paperId = focusId;
+			deletePaperByAjax(paperId);
 			//
 			refreshThisPage();
-			alert("删除文件："+focusId);
+			mui('#mui-popover-longtapItem').popover('toggle');//show hide toggle
 		}
 		
 		//删除分类弹出菜单
@@ -390,8 +404,13 @@
 		
 		//下拉刷新
 		function pulldownRefresh(){
-			refreshThisPage();
-			alert("pull over");
+			try{
+				refreshThisPage();
+				
+			}catch(e){
+				alert(e.message);
+			}
+
 			mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 				
 		}

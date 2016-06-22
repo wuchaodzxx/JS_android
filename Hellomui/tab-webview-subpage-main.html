@@ -36,7 +36,7 @@
 	<script src="js/my/paperUtil.js"></script>
 	<script>
 		window.focusId=null;//当前聚焦文件id，用于弹出菜单对文件的操作，用来传值
-		window.ajaxData=null;
+		window.jsonData=null;
 	</script>
 	<script>
 		mui.init({
@@ -57,7 +57,8 @@
 //			var paperList=jsonPaperList.createPaperList(50);
 //			var paperNumbers=paperList.paperList.length;//统计用户文章总数目
 			//
-			jsonData = getPaperListByAjax();
+			jsonData = getPaperListByAjax(); 
+			alert("dw:"+JSON.stringify(jsonData));
 			var paperList = jsonData.paperList;
 			var paperNumbers=paperList.paperList.length;//统计用户文章总数目
 			
