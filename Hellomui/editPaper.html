@@ -168,14 +168,27 @@
 			//下面开始上传
 			if(reEditPaper){
 				try{
-					sendReEditPaperByAjax(paper);
+					var ajaxStatus = sendReEditPaperByAjax(paper);
+					if(ajaxStatus=="success"){
+						mui.toast("上传成功");
+						var wb = plus.webview.getWebviewById("editPaper");
+						plus.webview.close(wb);
+					}else{
+						mui.toast("上传失败");
+					}
 				}catch(e){
 					alert(e.message);
 				}
 				
 			}else{
-				
-				sendNewPaperByAjax(paper);
+				var ajaxStatus = sendNewPaperByAjax(paper);
+				if(ajaxStatus=="success"){
+					mui.toast("上传成功");
+					//tab-webview-subpage-paper.html
+					plus.webview.show("tab-webview-subpage-paper.html");
+				}else{
+					mui.toast("上传失败");
+				}
 			}
 		}
 		

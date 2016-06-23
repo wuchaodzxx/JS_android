@@ -52,24 +52,53 @@
 
 
 
-function createPaperElement(paperId,paperName,paperDate,paperAuthor,paperAbstract){
+function createPaperElement(paper){
+	var paperId=paper.paperId;
+	var paperClass=paper.paperClass;
+	var paperName=paper.paperName;
+	var paperDate=(new Date(paper.paperDate )).toLocaleDateString();
+	var paperAuthor=paper.paperAuthor;
+	var paperContent=paper.paperContent;
 	var paperElement = document.createElement("li");
 	paperElement.className="mui-table-view-cell mui-media";
 	var paperLink = document.createElement("a");
 	paperElement.insertBefore(paperLink,paperElement.firstChild);
-	paperLink.id = "paperId";
+	paperLink.id = paperId;
 	paperLink.className="paperLink";
 	var paperDiv = document.createElement("div");
 	paperLink.insertBefore(paperDiv,paperLink.firstChild);
 	paperDiv.className="mui-media-body";
 	
 	var innerHtml = paperName+"<br/>"+"<span style='color:#F0AD4E; font-size: 13px;'>作者：<span id='author' >"+
-					paperAuthor+"</span></span><br/><span style='color:#F0AD4E;font-size: 13px;'>时间：<span id='author' >"+
+					paperAuthor+"</span></span><br/>"+"<span style='color:#F0AD4E; font-size: 13px;'>分类：<span id='author' >"+
+					paperClass+"</span></span><br/>"+"<span style='color:#F0AD4E;font-size: 13px;'>时间：<span id='author' >"+
 					paperDate+"</span></span><p class='mui-ellipsis'>"+
-					paperAbstract+"</p>";
+					paperContent+"</p>";
 	
 	paperDiv.innerHTML=innerHtml;
 	
+				//单击某项，执行该函数
+			mui(".mui-table-view-cell").on('tap','.paperLink',function(event){
+			event.stopPropagation();
+			 focusId=this.id;
+			
+			 //找到对应的paper
+			var paper=null;
+			for(var i=0;i<paperList.length;i++){
+				if(paperList[i].paperId == focusId){
+					paper = paperList[i];
+					break ;
+				}
+			}
+			var webview = mui.openWindow({url:'readPaper.html',id:'readPaper',extras:{
+					paperName:paper.paperName,
+					paperContent:paper.paperContent,
+					paperDate: (new Date(paper.paperDate)).toLocaleDateString()
+			}});
+			  
+			  
+			});  
+			
 	return paperElement;
 	
 //<li class="mui-table-view-cell mui-media">
@@ -232,7 +261,6 @@ function refreshPaperDom(paperShowElement,paperClassElementList,jsonData){
 	
 
 }
-
 function getPaperListByAjax(){
 	var ajaxData = null;
 	var stateText = localStorage.getItem('$state') || "{}";
@@ -251,12 +279,13 @@ function getPaperListByAjax(){
 				success:function(data){
 					//alert(data.status);
 					//服务器返回响应，根据响应结果，分析是否登录成功；
-					mui.toast("获取PaperList成功");
+					mui.toast("刷新成功");
 					ajaxData =  data;
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
-					mui.toast("获取PaperList失败");
+					mui.toast("刷新失败，请检查网络！");
+					
 				},
 				headers: { 
 					'Access-Control-Allow-Headers':'X-Requested-With'
@@ -266,6 +295,7 @@ function getPaperListByAjax(){
 }
 
 function sendNewPaperByAjax(paper){
+	var ajaxStatus = null;
 	var stateText = localStorage.getItem('$state') || "{}";
 	var state = JSON.parse(stateText);
 	var blog ={};
@@ -285,18 +315,21 @@ function sendNewPaperByAjax(paper){
 					//alert(data.status);
 					//服务器返回响应，根据响应结果，分析是否登录成功；
 					mui.toast("上传成功");
-				
+					ajaxStatus="success";
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
+					ajaxStatus="failed";
 					mui.toast("上传失败");
 				},
 				headers: { 
 					'Access-Control-Allow-Headers':'X-Requested-With'
 				}
 			});	
+		return ajaxStatus;
 }
 function sendReEditPaperByAjax(paper){
+	var ajaxStatus = null;
 	var stateText = localStorage.getItem('$state') || "{}";
 	var state = JSON.parse(stateText);
 	var blog ={};
@@ -316,20 +349,20 @@ function sendReEditPaperByAjax(paper){
 				success:function(data){
 					//alert(data.status);
 					//服务器返回响应，根据响应结果，分析是否登录成功；
-					mui.toast("上传成功");
-				
+					//mui.toast("上传成功");
+					ajaxStatus="success";
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
-					mui.toast("上传失败");
-				
+					//mui.toast("上传失败");
+					ajaxStatus="failed";
 				},
 				headers: { 
 					'Access-Control-Allow-Headers':'X-Requested-With'
 				}
 			});	
+		return ajaxStatus;
 }
-
 function addPaperClassByAjax(className){
 	var stateText = localStorage.getItem('$state') || "{}";
 	var state = JSON.parse(stateText);
@@ -359,14 +392,13 @@ function addPaperClassByAjax(className){
 				}
 			});	
 }
-
 function deletePapersClassByAjax(deleteClassName){
 	var stateText = localStorage.getItem('$state') || "{}";
 	var state = JSON.parse(stateText);
 	var jsonData = {};
 	jsonData.username = state.name;
 	jsonData.className = deleteClassName;
-	mui.ajax('http://139.129.34.134/share/mobile/addPaperClass.do',{
+	mui.ajax('http://139.129.34.134/share/mobile/deletePapersClass.do',{
 				data:JSON.stringify(jsonData),
 				dataType:'json',//服务器返回json格式数据
 				contentType: "application/json",
@@ -377,19 +409,18 @@ function deletePapersClassByAjax(deleteClassName){
 				success:function(data){
 					//alert(data.status);
 					//服务器返回响应，根据响应结果，分析是否登录成功；
-					mui.toast("上传成功");
+					mui.toast("删除成功");
 				
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
-					mui.toast("上传失败");
+					mui.toast("删除失败");
 				},
 				headers: { 
 					'Access-Control-Allow-Headers':'X-Requested-With'
 				}
 			});	
 }
-
 function deletePaperByAjax(paperId){
 	var stateText = localStorage.getItem('$state') || "{}";
 	var state = JSON.parse(stateText);

@@ -27,7 +27,6 @@
 				<!--数据列表-->
 				<ul class="mui-table-view mui-table-view-chevron">
 					
-				
 				</ul>
 			</div>
 		</div>
@@ -36,7 +35,7 @@
 	<script src="js/my/paperUtil.js"></script>
 	<script>
 		window.focusId=null;//当前聚焦文件id，用于弹出菜单对文件的操作，用来传值
-		window.jsonData=null;
+		window.ajaxData=null;
 	</script>
 	<script>
 		mui.init({
@@ -53,58 +52,67 @@
 				}
 			});
 			
-			
 //			var paperList=jsonPaperList.createPaperList(50);
 //			var paperNumbers=paperList.paperList.length;//统计用户文章总数目
-			//
+			// 
 			jsonData = getPaperListByAjax(); 
-			alert("dw:"+JSON.stringify(jsonData));
-			var paperList = jsonData.paperList;
-			var paperNumbers=paperList.paperList.length;//统计用户文章总数目
 			
+			var paperList = sortByTime(jsonData.paperList);
+			
+			var paperNumbers=paperList.length;//统计用户文章总数目
+			
+
 			//初始化，显示部分文章列表
-			pulldownRefresh(); 
+			pulldownRefresh();  
+			
 			/**
 			 * 下拉刷新具体业务实现
 			 */
 			function pulldownRefresh() {
-				setTimeout(function() {
-					var table = document.body.querySelector('.mui-table-view');
-					var cells = document.body.querySelectorAll('.mui-table-view-cell');
-					var tableChilds = table.childNodes;
-					//删除所有文章列表，从新显示
-					for(var i=0;i<tableChilds.length;i++){
-						table.removeChild(tableChilds[i]);
-					}
-					//重新显示
-					(function(){
-						//在实际业务中，在这行应该对paperList进行获取服务器的实时数据，同时更新paperNumbers的值
-						//ajax获取paperList
-						jsonData = getPaperListByAjax();
-						paperList = jsonData.paperList;
-						paperNumbers=paperList.paperList.length;//统计用户文章总数目
-						//alert(paperList.paperList[0]);
+				try{
+					setTimeout(function() {
 						var table = document.body.querySelector('.mui-table-view');
-						table.innerHTML="";
-						for (var i = 0; i < 10; i++) {
-							if(i<=paperList.paperList.length){
-								var paperElement = createPaperElement(paperList.paperList[i]);
-								//下拉刷新，新纪录插到最前面；
-								table.insertBefore(paperElement, table.firstChild); 
-							}
+						var cells = document.body.querySelectorAll('.mui-table-view-cell');
+						var tableChilds = table.childNodes;
+						//删除所有文章列表，重新显示
+						for(var i=0;i<tableChilds.length;i++){
+							table.removeChild(tableChilds[i]);
 						}
+						//重新显示
+						(function(){
+							//在实际业务中，在这行应该对paperList进行获取服务器的实时数据，同时更新paperNumbers的值
+							//ajax获取paperList
+							jsonData = getPaperListByAjax();
+							paperList = sortByTime(jsonData.paperList);
+							paperNumbers=paperList.length;//统计用户文章总数目
+					 		
+							//alert(paperList.paperList[0]);
+							var table = document.body.querySelector('.mui-table-view');
+							table.innerHTML="";
+							for (var i = 0; i < 10; i++) {
+								 
+								if(i<paperList.length){
+									var paperElement = createPaperElement(paperList[i]);
+									//下拉刷新，新纪录插到最前面；
+									//table.insertBefore(paperElement, table.firstChild); 
+									table.appendChild(paperElement);
+								}else{
+									
+								}
+							}
 						
-					}());
-					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
-				}, 1000);//实际开发，可能需要减小timeout的时间
+							
+						}());
+						mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+					}, 10);//实际开发，可能需要减小timeout的时间
+				}catch(e){
+					alert(e.message);
+				}
+					
 				
 				
 			}
 			
-			function getPaperListByAjax(){
-				paperList=jsonPaperList.createPaperList(50);
-			 	paperNumbers=paperList.paperList.length;//统计用户文章总数目
-			}
 			
 			/**
 			 * 上拉加载具体业务实现
@@ -126,12 +134,25 @@
 							mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
 						}
 						
-						var paperElement = createPaperElement(paperList.paperList[i]);
+						var paperElement = createPaperElement(paperList[i]);
 						table.appendChild(paperElement); 
 					}
 				}, 1500);
 			
 			}
-			
+		//对paperList根据其时间排序，时间最新的放在前面
+		function sortByTime(paperList){
+			return paperList.sort(compare4Paper);
+		}
+		function compare4Paper(p1,p2){
+			if(p1.paperDate>p2.paperDate){
+				return -1;
+			}else if(p1.paperDate<p2.paperDate){
+				return +1;
+			}else{
+				return 0;
+			}
+		}
+		//alert("sort:"+JSON.stringify(sortByTime(paperList)));
 	</script>
 </html>
